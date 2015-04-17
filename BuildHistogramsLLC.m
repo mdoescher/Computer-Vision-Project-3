@@ -67,6 +67,7 @@ H_all = [];
 if(exist('pfig','var'))
     %tic;
 end
+one=ones(params.number_neighbors, 1); % a column vector
 for f = 1:length(imageFileList)
 
     imageFName = imageFileList{f};
@@ -99,42 +100,40 @@ for f = 1:length(imageFileList)
     %fprintf('Loaded %s, %d descriptors\n', inFName, ndata);
 
     %% find texton indices and compute histogram 
-    texton_ind.data = zeros(ndata,1); % a column vector with same number of rows as sift features points
+    texton_ind.data = zeros(ndata,params.number_neighbors); 
     texton_ind.x = features.x;
     texton_ind.y = features.y;
     texton_ind.wid = features.wid;
     texton_ind.hgt = features.hgt;
-    %run in batches to keep the memory foot print small
-    batchSize = 100000;
-    knN =  knnsearch(features.data, dictionary,'k',params.number_neighbors); %TBD
     
-    if ndata <= batchSize
+    k=params.number_neighbors;
+    knn =  knnsearch(dictionary, features.data,'k',k);
+    texton_ind.knn=knn;
+    
+    for i=1:ndata % for each descriptor
+        Bi = dictionary(knn(i,:),:); % get the reduced matrix with the k closest entries in B to the descriptor as rows
+        x = features.data(i,:); % row vector
         
-        
-        % dist_mat = sp_dist2(features.data, dictionary);
-        % [min_dist, min_ind] = min(dist_mat, [], 2);
-        % texton_ind.data = min_ind;
-    else
-        for j = 1:batchSize:ndata
-            lo = j;
-            hi = min(j+batchSize-1,ndata);
-            dist_mat = sp_dist2(features.data(lo:hi,:), dictionary);
-            [min_dist, min_ind] = min(dist_mat, [], 2);
-            texton_ind.data(lo:hi,:) = min_ind;
-        end
+        % these next four lines are inspired by Jia's demo code
+        B_1x = Bi - one *x; % a matrix
+        C = B_1x * B_1x'; % the covariance matrix
+        c_hat = C \ one;
+        c = c_hat /sum(c_hat);
+        texton_ind.data(i,:)=c;
+        %texton_ind.data(i,knn(i,:))=c;
     end
-
-    H = hist(texton_ind.data, 1:params.dictionarySize);
-    H_all = [H_all; H];
+    
+    %H=sum(C);
+    %H_all = [H_all; H];
 
     %% save texton indices and histograms
     sp_make_dir(outFName);
     save(outFName, 'texton_ind');
-    save(outFName2, 'H');
+    %save(outFName2, 'H');
 end
 
 %% save histograms of all images in this directory in a single file
-outFName = fullfile(dataBaseDir, sprintf('histograms_%d.mat', params.dictionarySize));
+%outFName = fullfile(dataBaseDir, sprintf('histograms_%d.mat', params.dictionarySize));
 %save(outFName, 'H_all', '-ascii');
 
 

@@ -1,4 +1,5 @@
 global dictionary
+global h
 
 %control all the parameters
 params.maxImageSize = 1000
@@ -7,6 +8,7 @@ params.patchSize = 16
 params.dictionarySize = 200 %200
 params.numTextonImages = 300
 params.pyramidLevels = 2 % min 1
+params.number_neighbors = 5;
 
 number_directories=2 %15;
 listing=dir('Scene_Categories');
@@ -14,14 +16,14 @@ listing=dir('Scene_Categories');
 % load the images and build the pyramids
 for i=3:2+number_directories
    image_dir=['Scene_Categories/' listing(i).name];
-   data_dir = ['data_' listing(i).name];
+   data_dir = ['data_LLC_' listing(i).name];
    fnames = dir(fullfile(image_dir, '*.jpg'));
    num_files = size(fnames,1);
    filenames = cell(num_files,1);
    for f = 1:num_files
 	   filenames{f} = fnames(f).name;
    end
-   pyramids{i-2} = BuildPyramid(filenames,image_dir,data_dir,params,1,0);  
+   pyramids{i-2} = BuildPyramidLLC(filenames,image_dir,data_dir,params,1,0);  
 end
     
 % construct training_data_set and testing_data_set

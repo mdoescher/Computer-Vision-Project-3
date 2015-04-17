@@ -24,6 +24,7 @@ function [ H_all ] = BuildHistograms( imageFileList,imageBaseDir, dataBaseDir, f
 %  update some of the data or if you've added new images.
 
 fprintf('Building Histograms\n\n');
+global dictionary;
 
 %% parameters
 
