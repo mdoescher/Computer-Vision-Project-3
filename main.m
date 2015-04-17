@@ -7,22 +7,19 @@ params.numTextonImages = 300
 params.pyramidLevels = 2 % min 1
 
 number_directories=15;
-
 listing=dir('Scene_Categories');
+
+% load the images and build the pyramids
 for i=3:2+number_directories
    image_dir=['Scene_Categories/' listing(i).name];
    data_dir = ['data_' listing(i).name];
-     
    fnames = dir(fullfile(image_dir, '*.jpg'));
    num_files = size(fnames,1);
    filenames = cell(num_files,1);
-
    for f = 1:num_files
 	   filenames{f} = fnames(f).name;
    end
-
    pyramids{i-2} = BuildPyramid(filenames,image_dir,data_dir,params,1,0);  
-       
 end
     
 % construct training_data_set and testing_data_set
@@ -61,7 +58,7 @@ for j=1:number_directories
         i=i+1
         probability_vector = zeros(1,number_directories);
         for m=1:number_directories
-           [predicted_label, accuracy, probability_vector(m)] = predict(1,testing_data_set(i,:), model{m});
+           [~, ~, probability_vector(m)] = predict(1,testing_data_set(i,:), model{m});
         end
         [M,I]=max(probability_vector);
         confusion_matrix(j,I)=confusion_matrix(j,I)+1;
@@ -70,6 +67,18 @@ end
 
 confusion_matrix
 save('confusion_matrix_experiment_1', 'confusion_matrix');
+
+number_correct = sum(diag(confusion_matrix));
+number_total = sum(sum(confusion_matrix));
+accuracy = number_correct/number_total
+
+tmp = sum(confusion_matrix')'
+for i = 1:size(confusion_matrix,1)
+    for j = 1:size(confusion_matrix,2)
+    confusion_matrix(i,j) = confusion_matrix(i,j)/tmp(i);
+    end
+end
+
     
     
    
