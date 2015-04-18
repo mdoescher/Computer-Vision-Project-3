@@ -87,6 +87,6 @@ if(saveSift)
 end
 CalculateDictionary(imageFileList,imageBaseDir,dataBaseDir,'_sift.mat',params,canSkip,pfig);
 BuildHistogramsLLC(imageFileList,imageBaseDir,dataBaseDir,'_sift.mat',params,canSkip,pfig);
-pyramid_all = CompilePyramidLLCSumPoolingSumNormalization(imageFileList,dataBaseDir,sprintf('_texton_ind_%d.mat',params.dictionarySize),params,canSkip,pfig);
+pyramid_all = CompilePyramidLLCMaxPoolingL2Normalization(imageFileList,dataBaseDir,sprintf('_texton_ind_%d.mat',params.dictionarySize),params,0,pfig);
 close(pfig);
 end

@@ -1,5 +1,3 @@
-global dictionary
-
 %control all the parameters
 params.maxImageSize = 1000
 params.gridSpacing = 1

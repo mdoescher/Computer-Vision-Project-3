@@ -23,6 +23,7 @@ function [ pyramid_all ] = CompilePyramid( imageFileList, dataBaseDir, textonSuf
 %  update some of the data or if you've added new images.
 
 fprintf('Building Spatial Pyramid\n\n');
+global texton_patch;
 
 %% parameters
 
