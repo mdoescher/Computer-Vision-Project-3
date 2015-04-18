@@ -15,7 +15,7 @@ listing=dir('Scene_Categories');
 
 % load the images and build the pyramids
 for i=3:2+number_directories
-   image_dir=['Scene_Categories/' listing(i).name];
+   image_dir=['Test_Scene_Categories/' listing(i).name];
    data_dir = ['data_LLC_' listing(i).name];
    fnames = dir(fullfile(image_dir, '*.jpg'));
    num_files = size(fnames,1);
