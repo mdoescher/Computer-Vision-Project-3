@@ -17,3 +17,9 @@ for i = 1:size(descriptors,1)
     dictionary(index, :) = Bi;
 end
 
+outFName = fullfile(dataBaseDir, sprintf('dictionary_%d.mat', params.dictionarySize));
+sp_make_dir(outFName);
+save(outFName, 'dictionary');
+
+end
+
