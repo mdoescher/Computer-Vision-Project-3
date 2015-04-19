@@ -1,4 +1,4 @@
-function [ H_all ] = BuildHistogramsLLC( imageFileList,imageBaseDir, dataBaseDir, featureSuffix, params, canSkip, pfig )
+function [ H_all ] = BuildHistogramsLLCOptimzedCodebook( imageFileList,imageBaseDir, dataBaseDir, featureSuffix, params, canSkip, pfig )
 %function [ H_all ] = BuildHistograms( imageFileList, dataBaseDir, featureSuffix, params, canSkip )
 %
 %find texton labels of patches and compute texton histograms of all images
@@ -64,9 +64,9 @@ fprintf('Loaded texton dictionary: %d textons\n', params.dictionarySize);
 
 %% compute texton labels of patches and whole-image histograms
 H_all = [];
-% if(exist('pfig','var'))
-%     %tic;
-% end
+if(exist('pfig','var'))
+    %tic;
+end
 one=ones(params.number_neighbors, 1); % a column vector
 for f = 1:length(imageFileList)
 
@@ -75,12 +75,12 @@ for f = 1:length(imageFileList)
     baseFName = fullfile(dirN, base);
     inFName = fullfile(dataBaseDir, sprintf('%s%s', baseFName, featureSuffix));
     
-%     if(mod(f,100)==0 && exist('pfig','var'))
-%         sp_progress_bar(pfig,3,4,f,length(imageFileList),'Building Histograms:');
-%     end
+    if(mod(f,100)==0 && exist('pfig','var'))
+        sp_progress_bar(pfig,3,4,f,length(imageFileList),'Building Histograms:');
+    end
     outFName = fullfile(dataBaseDir, sprintf('%s_texton_ind_%d.mat', baseFName, params.dictionarySize));
     outFName2 = fullfile(dataBaseDir, sprintf('%s_hist_%d.mat', baseFName, params.dictionarySize));
-    if(exist(outFName,'file')~=0 && canSkip) % && exist(outFName2,'file')~=0
+    if(exist(outFName,'file')~=0 && exist(outFName2,'file')~=0 && canSkip)
         %fprintf('Skipping %s\n', imageFName);
         if(nargout>1)
             load(outFName2, 'H');
@@ -96,7 +96,7 @@ for f = 1:length(imageFileList)
         features = sp_gen_sift(fullfile(imageBaseDir, imageFName),params);
     end
     ndata = size(features.data,1);
-    %sp_progress_bar(pfig,3,4,f,length(imageFileList),'Building Histograms:');
+    sp_progress_bar(pfig,3,4,f,length(imageFileList),'Building Histograms:');
     %fprintf('Loaded %s, %d descriptors\n', inFName, ndata);
 
     %% find texton indices and compute histogram 
