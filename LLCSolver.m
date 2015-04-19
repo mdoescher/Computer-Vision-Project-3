@@ -1,4 +1,4 @@
-function [ c, knn ] = LLCSolver( dictionary, xi, numneighbors)
+function [ ci, knn ] = LLCSolver( dictionary, xi, numneighbors)
 k = numneighbors;
 knn =  knnsearch(dictionary, features.data,'k',k);
 Bi = dictionary(knn(i,:),:); % get the reduced matrix with the k closest entries in B to the descriptor as rows
