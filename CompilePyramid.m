@@ -59,9 +59,9 @@ end
 
 binsHigh = 2^(params.pyramidLevels-1);
 
-if(exist('pfig','var'))
-    %tic;
-end
+% if(exist('pfig','var'))
+%     %tic;
+% end
 pyramid_all = zeros(length(imageFileList),params.dictionarySize*sum((2.^(0:(params.pyramidLevels-1))).^2));
 for f = 1:length(imageFileList)
 
@@ -71,9 +71,9 @@ for f = 1:length(imageFileList)
     [dirN base] = fileparts(imageFName);
     baseFName = fullfile(dirN, base);
     
-    if(mod(f,100)==0 && exist('pfig','var'))
-        sp_progress_bar(pfig,4,4,f,length(imageFileList),'Compiling Pyramid:');
-    end
+%     if(mod(f,100)==0 && exist('pfig','var'))
+%         sp_progress_bar(pfig,4,4,f,length(imageFileList),'Compiling Pyramid:');
+%     end
     outFName = fullfile(dataBaseDir, sprintf('%s_pyramid_%d_%d.mat', baseFName, params.dictionarySize, params.pyramidLevels));
     if(size(dir(outFName),1)~=0 && canSkip)
         %fprintf('Skipping %s\n', imageFName);
@@ -91,7 +91,7 @@ for f = 1:length(imageFileList)
     hgt = texton_ind.hgt;
 
     %fprintf('Loaded %s: wid %d, hgt %d\n', imageFName, wid, hgt);
-    sp_progress_bar(pfig,4,4,f,length(imageFileList),'Compiling Pyramid:');
+%     sp_progress_bar(pfig,4,4,f,length(imageFileList),'Compiling Pyramid:');
     
     %% compute histogram at the finest level
     pyramid_cell = cell(params.pyramidLevels,1);

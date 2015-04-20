@@ -11,11 +11,11 @@ params.number_neighbors = 5;
 
 number_directories=15;
 training_size=100;
-regenerateDictionary=0;
-canSkip=0;
+regenerateDictionary=1;
+canSkip=1;
 
 directory = 'Scene_Categories/';
-dictionary_dir = ['data_200_LLC_'];
+dictionary_dir = ['data_200_SPM_'];
 subfolderlist = dir(directory);
 filepaths = cell(size(subfolderlist,1),1);
 newfiles = [];
@@ -53,10 +53,11 @@ parfor i=3:2+number_directories
    for f = 1:num_files
 	   filenames{f} = fnames(f).name;
    end
-   pyramids{i-2} = BuildPyramidLLC(filenames,image_dir,data_dir,params,canSkip,0);  
+   pyramids{i-2} = BuildPyramid(filenames,image_dir,data_dir,params,canSkip,0);  
 end
 
-  
+
+ 
 % construct training_data_set and testing_data_set
 fprintf('Construct Training and Test data sets');
 training_data_set=[];

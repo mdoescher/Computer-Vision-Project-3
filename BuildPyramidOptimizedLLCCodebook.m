@@ -82,10 +82,7 @@ end
 
 pfig = sp_progress_bar('Building Spatial Pyramid');
 %% build the pyramid
-if(saveSift)
-   GenerateSiftDescriptors( imageFileList,imageBaseDir,dataBaseDir,params,canSkip,pfig);
-end
-CalculateDictionary(imageFileList,imageBaseDir,dataBaseDir,'_sift.mat',params,1,pfig);
+BuildLLCCodebook(imageFileList,imageBaseDir,dataBaseDir,params,canSkip,pfig);
 BuildHistogramsLLC(imageFileList,imageBaseDir,dataBaseDir,'_sift.mat',params,canSkip,pfig);
 pyramid_all = CompilePyramidLLCMaxPoolingL2Normalization(imageFileList,dataBaseDir,sprintf('_texton_ind_%d.mat',params.dictionarySize),params,canSkip,pfig);
 close(pfig);

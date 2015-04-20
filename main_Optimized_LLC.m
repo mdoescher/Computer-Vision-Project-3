@@ -4,18 +4,18 @@ tic
 params.maxImageSize = 1000
 params.gridSpacing = 1
 params.patchSize = 16
-params.dictionarySize = 200
+params.dictionarySize = 1000
 params.numTextonImages = 1500
 params.pyramidLevels = 2 % minimum 1
 params.number_neighbors = 5;
 
 number_directories=15;
 training_size=100;
-regenerateDictionary=0;
-canSkip=0;
+regenerateDictionary=1;
+canSkip=1;
 
 directory = 'Scene_Categories/';
-dictionary_dir = ['data_200_LLC_'];
+dictionary_dir = ['data_1000_Optimized_LLC_'];
 subfolderlist = dir(directory);
 filepaths = cell(size(subfolderlist,1),1);
 newfiles = [];
@@ -29,7 +29,7 @@ if (regenerateDictionary==1)
             filepaths{(i-1)*training_size+j}  = strcat(subfolderlist(i+2).name,'/',files(perm{i}(j)).name);
         end
     end
-    [dictionary] = buildcodebook(filepaths,directory,dictionary_dir,params,0,0); 
+    [dictionary] = BuildOptimizedCodebook(filepaths,directory,dictionary_dir,params,0,0); 
 
     for i=3:size(subfolderlist,1)
         outFName = fullfile([dictionary_dir subfolderlist(i).name], sprintf('dictionary_%d.mat', params.dictionarySize));
@@ -53,10 +53,11 @@ parfor i=3:2+number_directories
    for f = 1:num_files
 	   filenames{f} = fnames(f).name;
    end
-   pyramids{i-2} = BuildPyramidLLC(filenames,image_dir,data_dir,params,canSkip,0);  
+   pyramids{i-2} = BuildPyramidOptimizedLLCCodebook(filenames,image_dir,data_dir,params,canSkip,0);  
 end
 
-  
+
+ 
 % construct training_data_set and testing_data_set
 fprintf('Construct Training and Test data sets');
 training_data_set=[];
@@ -120,15 +121,6 @@ for i=1:number_directories
    accuracy_of_class(i)=confusion_matrix(i,i)/testing_image_count(i);
 end
 accuracy_of_class
-
-% tmp = sum(confusion_matrix')'
-% for i = 1:size(confusion_matrix,1)
-%     for j = 1:size(confusion_matrix,2)
-%     confusion_matrix(i,j) = confusion_matrix(i,j)/tmp(i);
-%     end
-% end
-
- 
 
 toc
     
