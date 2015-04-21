@@ -4,18 +4,18 @@ tic
 params.maxImageSize = 1000
 params.gridSpacing = 1
 params.patchSize = 16
-params.dictionarySize = 200
+params.dictionarySize = 1024
 params.numTextonImages = 1500
-params.pyramidLevels = 2 % minimum 1
+params.pyramidLevels = 3 % minimum 1
 params.number_neighbors = 5;
 
 number_directories=15;
 training_size=100;
 regenerateDictionary=0;
-canSkip=0;
+canSkip=1;
 
 directory = 'Scene_Categories/';
-dictionary_dir = ['data_200_LLC_'];
+dictionary_dir = ['data_1024_LLC_'];
 subfolderlist = dir(directory);
 filepaths = cell(size(subfolderlist,1),1);
 newfiles = [];
