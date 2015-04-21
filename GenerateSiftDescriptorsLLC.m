@@ -1,4 +1,4 @@
-function [features] = GenerateSiftDescriptorsLLC( imageFileList, imageBaseDir, dataBaseDir, params, canSkip, pfig )
+function [features] = GenerateSiftDescriptors( imageFileList, imageBaseDir, dataBaseDir, params, canSkip, pfig )
 %function [] = GenerateSiftDescriptors( imageFileList, imageBaseDir, dataBaseDir, maxImageSize, gridSpacing, patchSize, canSkip )
 %
 %Generate the dense grid of sift descriptors for each
@@ -64,14 +64,20 @@ for f = 1:length(imageFileList)
     outFName = fullfile(dataBaseDir, sprintf('%s_sift.mat', baseFName));
     imageFName = fullfile(imageBaseDir, imageFName);
     
-
+    if(mod(f,100)==0 && exist('pfig','var'))
+        sp_progress_bar(pfig,1,4,f,length(imageFileList));
+    end
     if(exist(outFName,'file')~=0 && canSkip)
         %fprintf('Skipping %s\n', imageFName);
         continue;
     end
     
     features = sp_gen_sift(imageFName,params);
-
+    sp_progress_bar(pfig,1,4,f,length(imageFileList),'Generating Sift Descriptors:');
+    
+    sp_make_dir(outFName);
+    features
+    save(outFName, 'features');
     
 
 end % for
